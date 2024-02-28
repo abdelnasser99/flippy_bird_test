@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+
 public class GameManeger : MonoBehaviour
 {
     private static GameManeger _instance;
@@ -26,6 +30,7 @@ public class GameManeger : MonoBehaviour
     private int score = 0;
     public int highScore;
     public Text scoreText;
+    public Text binary;
     public Text highscoreText;
     public player player;
     public pieps piep;
@@ -39,9 +44,11 @@ public class GameManeger : MonoBehaviour
     public GameObject Gameover;
     public int countdowntime = 3;
     public Text countdown;
-    
+    public BinaryFormatter formater;
+    public FileStream savedfile;
     public void Awake()
     {
+        savetofile();
         Gameover.SetActive(false);
         pauseButton.SetActive(false);
         resume.SetActive(false);
@@ -85,6 +92,7 @@ public class GameManeger : MonoBehaviour
     }
     public void Play()
     {
+
         //startcount();
         pauseButton.SetActive(false);
         resume.SetActive(false);
@@ -128,7 +136,26 @@ public class GameManeger : MonoBehaviour
         Time.timeScale = 0f;
         player.enabled = false;
     }
-    public void increaseScore()
+    [Serializable]
+    public struct data
+    {
+        public string playername;
+        public int highscore_birany;
+    }
+    public string directory = "Saves";
+    data data2;
+    public void savetofile()
+    {
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory + ".bin");
+        }
+        BinaryFormatter formater = new BinaryFormatter();
+        FileStream savefile = File.Create("Saves.bin");
+        formater.Serialize(savefile, data2);
+        savefile.Close();
+    }
+        public void increaseScore()
     {
         score++;
         scoreText.text = score.ToString();
@@ -143,6 +170,12 @@ public class GameManeger : MonoBehaviour
         {
             scoreText.color = new Color(255, 0, 0);
         }
+        if (data2.highscore_birany > highScore)
+        {
+            binary.color = new Color(0, 0, 255);
+            data2.highscore_birany = highScore;
+            savedfile.Close();
+        }
     }
     public void GameOver()
     {
@@ -154,4 +187,6 @@ public class GameManeger : MonoBehaviour
     {
         highscoreText.text = PlayerPrefs.GetInt("highscore").ToString();
     }
+ 
+    
 }
