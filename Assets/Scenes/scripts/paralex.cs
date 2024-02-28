@@ -7,10 +7,10 @@ public class paralex : MonoBehaviour
     public float animationspeed = 1f;
     private void Awake()
     {
-    meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
     private void Update()
     {
-    meshRenderer.material.mainTextureOffset+= new Vector2(animationspeed*Time.deltaTime,0);
+        meshRenderer.material.mainTextureOffset += new Vector2(animationspeed * Time.deltaTime, 0);
     }
 }

@@ -32,7 +32,7 @@ public class player : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
+            if (touch.phase == TouchPhase.Began) 
             {
                 direction = Vector3.up * strength;
             }
@@ -44,11 +44,16 @@ public class player : MonoBehaviour
     {
         if(other.gameObject.tag =="obstecle")
         {
-            FindObjectOfType<GameManeger>().GameOver();
+            //FindObjectOfType<GameManeger>().GameOver();
+            GameManeger singleton = GameManeger.Instance;
+            singleton.GameOver();
         }
         else if(other.gameObject.tag == "scoring")
         {
-            FindObjectOfType<GameManeger>().increaseScore(); 
+            //FindObjectOfType<GameManeger>().increaseScore();
+            GameManeger singleton = GameManeger.Instance;
+            singleton.increaseScore();
         }
     }
+   
 }

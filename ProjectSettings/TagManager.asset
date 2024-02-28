@@ -6,6 +6,7 @@ TagManager:
   tags:
   - obstecle
   - scoring
+  - obstecle_pipe
   layers:
   - Default
   - TransparentFX

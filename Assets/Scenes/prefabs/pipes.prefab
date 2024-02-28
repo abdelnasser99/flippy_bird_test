@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 8089040659180037351}
   m_Layer: 0
   m_Name: pipes
-  m_TagString: Untagged
+  m_TagString: obstecle_pipe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
