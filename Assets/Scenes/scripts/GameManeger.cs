@@ -37,6 +37,7 @@ public class GameManeger : MonoBehaviour
     public paralex background;
     public paralex background2;
     public GameObject playButton;
+    public GameObject playButton2;
     public GameObject pauseButton;
     public GameObject restart;
     public GameObject resume;
@@ -48,12 +49,14 @@ public class GameManeger : MonoBehaviour
     public FileStream savedfile;
     public void Awake()
     {
-        savetofile();
         Gameover.SetActive(false);
         pauseButton.SetActive(false);
         resume.SetActive(false);
         restart.SetActive(false);
         mainmenue.SetActive(false);
+        playButton2.SetActive(false);
+        //binary_highscore tempscore = new binary_highscore();    
+        //tempscore.SaveHighScore(0);
         Application.targetFrameRate = 60;
         if (_instance == null)
         {
@@ -95,6 +98,7 @@ public class GameManeger : MonoBehaviour
 
         //startcount();
         pauseButton.SetActive(false);
+        playButton2.SetActive(false);   
         resume.SetActive(false);
         restart.SetActive(false);
         Time.timeScale = 1f;
@@ -102,15 +106,15 @@ public class GameManeger : MonoBehaviour
         score = 0;
         scoreText.color = new Color(255, 0, 0);
         scoreText.text = score.ToString();
-
         Gameover.SetActive(false);
 
         piep.enabled = true;
         background.enabled = true;
         background2.enabled = true;
         player.enabled = true;
-        //pieps[] PiepsList = FindObjectsOfType<pieps>(); //change here
-        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("obstecle_pipe");
+     
+       //pieps[] PiepsList = FindObjectsOfType<pieps>(); //change here
+       GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("obstecle_pipe");
         for (int i = 0; i < gameObjects.Length; i++)
         {
             Destroy(gameObjects[i].gameObject);
@@ -136,56 +140,38 @@ public class GameManeger : MonoBehaviour
         Time.timeScale = 0f;
         player.enabled = false;
     }
-    [Serializable]
-    public struct data
-    {
-        public string playername;
-        public int highscore_birany;
-    }
-    public string directory = "Saves";
-    data data2;
-    public void savetofile()
-    {
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory + ".bin");
-        }
-        BinaryFormatter formater = new BinaryFormatter();
-        FileStream savefile = File.Create("Saves.bin");
-        formater.Serialize(savefile, data2);
-        savefile.Close();
-    }
-        public void increaseScore()
+    binary_highscore tempscore = new binary_highscore();
+    public void increaseScore()
     {
         score++;
         scoreText.text = score.ToString();
         highScore = PlayerPrefs.GetInt("highscore");
+        int binaryScore = tempscore.LoadHighScore();
+
         if (score > highScore)
         {
             PlayerPrefs.SetInt("highscore", score);
             PlayerPrefs.Save();
             scoreText.color = new Color(0, 0, 255);
+            tempscore.SaveHighScore(score);
+            //binary.text=score.ToString();
+            
         }
         else
         {
-            scoreText.color = new Color(255, 0, 0);
-        }
-        if (data2.highscore_birany > highScore)
-        {
-            binary.color = new Color(0, 0, 255);
-            data2.highscore_birany = highScore;
-            savedfile.Close();
+            scoreText.color = new Color(255, 0, 0);          
         }
     }
     public void GameOver()
     {
         Gameover.SetActive(true);
-        playButton.SetActive(true);
+        playButton2.SetActive(true);
         Pause();
     }
     private void Update()
     {
         highscoreText.text = PlayerPrefs.GetInt("highscore").ToString();
+        binary.text= tempscore.LoadHighScore().ToString();
     }
  
     
