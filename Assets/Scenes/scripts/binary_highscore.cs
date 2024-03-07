@@ -67,7 +67,7 @@ public class binary_highscore : MonoBehaviour
             saveData.blue = false;
             saveData.red = false;
             saveData.coin = 0;
-            saveData.highScore = 0;
+            saveData.highScore = 200;
             saveData.selected_carcter = 1;
 
             Debug.Log("No save file found. Initializing with default values.");
