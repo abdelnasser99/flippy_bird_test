@@ -1,25 +1,75 @@
+using System;
 using UnityEngine;
 
 public class player : MonoBehaviour
 {
     public Vector3 direction;
     public Vector3 directiontemp;
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     public float gravity = -9.8f;
     public float strength = 5f;
     public Sprite[] sprites;
+    public Sprite[] sprites2;
+    public Sprite[] sprites3;
     private int sprite_index = 0;
+    public AudioClip coindsound;
+    public AudioSource src;
+    int selectedCarcter;
+    SaveData saveData;
+    binary_highscore binary_Highscore;
+    //binarycarcter carcter = new binarycarcter();
     private void Awake()
     {
-        spriteRenderer=GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        binary_Highscore = gameObject.AddComponent<binary_highscore>();
+        saveData = binary_Highscore.Load();
+        selectedCarcter = saveData.selected_carcter;
+        //selectedCarcter = carcter.LoadSelectedCarcter();
+        switch (selectedCarcter)
+        {
+            case 1:
+                spriteRenderer.sprite = sprites[0];
+                break;
+            case 2:
+                spriteRenderer.sprite = sprites2[0];
+                break;
+            case 3:
+                spriteRenderer.sprite = sprites3[0];
+                break;
+        }
     }
+
+    
     private void animateSprites()
     {
         sprite_index++;
-        if(sprite_index >= sprites.Length){
-            sprite_index=0;
+        switch (selectedCarcter)
+        {
+            case 0:
+                sprite_index++;
+                if (sprite_index >= sprites.Length)
+                {
+                    sprite_index = 0;
+                }
+                spriteRenderer.sprite = sprites[sprite_index];
+                break;
+            case 1:
+                sprite_index++;
+                if (sprite_index >= sprites.Length)
+                {
+                    sprite_index = 0;
+                }
+                spriteRenderer.sprite = sprites2[sprite_index];
+                break;
+            case 2:
+                sprite_index++;
+                if (sprite_index >= sprites.Length)
+                {
+                    sprite_index = 0;
+                }
+                spriteRenderer.sprite = sprites3[sprite_index];
+                break;
         }
-        spriteRenderer.sprite = sprites[sprite_index];
     }
     private void Start(){
         InvokeRepeating(nameof(animateSprites),0.15f,0.15f);
@@ -61,6 +111,14 @@ public class player : MonoBehaviour
         {
             GameManeger singleton = GameManeger.Instance;
             singleton.GameOver();
+        }
+        else if (other.gameObject.tag == "coin")
+        {
+            GameManeger singleton = GameManeger.Instance;
+            singleton.coinCounter();
+            src.clip = coindsound;
+            src.Play(); 
+            Destroy(other.gameObject);
         }
     }
    

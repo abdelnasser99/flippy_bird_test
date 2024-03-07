@@ -4,24 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+//using static binarycarcter;
 
 public class binary_highscore : MonoBehaviour
 {
-    [Serializable]
-    public struct SaveData
+    private const string saveFileName = "saveData20.dat";
+    string savePath;
+    //SaveData saveData = new SaveData();
+    public SaveData Save(SaveData saveData)
     {
-        public int highScore;
-    }
-
-    private const string saveFileName = "saveData.dat";
-
-    public void SaveHighScore(int highScore)
-    {
-        SaveData saveData = new SaveData();
-        saveData.highScore = highScore;
-
+        
         BinaryFormatter formatter = new BinaryFormatter();
-        string savePath = Path.Combine(Application.persistentDataPath, saveFileName);
+        savePath = Path.Combine(Application.persistentDataPath, saveFileName);
 
         FileStream fileStream = null;
 
@@ -40,12 +34,13 @@ public class binary_highscore : MonoBehaviour
             if (fileStream != null)
                 fileStream.Close();
         }
+        return saveData;
     }
 
-    public int LoadHighScore()
+    public SaveData Load()
     {
         string savePath = Path.Combine(Application.persistentDataPath, saveFileName);
-
+        SaveData saveData = new SaveData();
         if (File.Exists(savePath))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -54,20 +49,12 @@ public class binary_highscore : MonoBehaviour
             try
             {
                 fileStream = File.Open(savePath, FileMode.Open);
-                SaveData saveData = (SaveData)formatter.Deserialize(fileStream);
-                if (saveData.highScore == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return saveData.highScore;
-                }
+                saveData = (SaveData)formatter.Deserialize(fileStream);
+                Debug.Log("SaveData loaded successfully");
             }
             catch (Exception e)
             {
-                Debug.LogError("Failed to load high score: " + e.Message);
-                return 0; 
+                Debug.LogError("Failed to load : " + e.Message);
             }
             finally
             {
@@ -77,8 +64,16 @@ public class binary_highscore : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Save file does not exist. Returning default high score.");
-            return 0;
+            saveData.blue = false;
+            saveData.red = false;
+            saveData.coin = 0;
+            saveData.highScore = 0;
+            saveData.selected_carcter = 1;
+
+            Debug.Log("No save file found. Initializing with default values.");
         }
+
+        return saveData;
     }
+
 }

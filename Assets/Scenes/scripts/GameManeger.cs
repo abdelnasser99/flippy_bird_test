@@ -34,6 +34,7 @@ public class GameManeger : MonoBehaviour
     public Text highscoreText;
     public player player;
     public pieps piep;
+    public coin_script Coin; 
     public paralex background;
     public paralex background2;
     public GameObject playButton;
@@ -45,10 +46,18 @@ public class GameManeger : MonoBehaviour
     public GameObject Gameover;
     public int countdowntime = 3;
     public Text countdown;
-    public BinaryFormatter formater;
-    public FileStream savedfile;
+    //public BinaryFormatter formater;
+    //public FileStream savedfile;
+    private SpriteRenderer spriteRenderer;
+    int selectedCarcter;
+    //binarycarcter carcter = new binarycarcter();
+    SaveData data= new SaveData();
+    public binary_highscore system;
     public void Awake()
     {
+        system = gameObject.AddComponent<binary_highscore>();
+        data = system.Load();
+        coin_ctr = 0;
         Gameover.SetActive(false);
         pauseButton.SetActive(false);
         resume.SetActive(false);
@@ -75,8 +84,8 @@ public class GameManeger : MonoBehaviour
         piep.enabled = false;
         background.enabled = false;
         background2.enabled = false;
+        Coin.enabled = false;
         StartCoroutine(countdowntostart());
-        
     }
     IEnumerator countdowntostart()
     {
@@ -95,7 +104,8 @@ public class GameManeger : MonoBehaviour
     }
     public void Play()
     {
-
+        
+        coin_ctr = 0;
         //startcount();
         pauseButton.SetActive(false);
         playButton2.SetActive(false);   
@@ -107,10 +117,11 @@ public class GameManeger : MonoBehaviour
         scoreText.color = new Color(255, 0, 0);
         scoreText.text = score.ToString();
         Gameover.SetActive(false);
-
+        Coin.enabled = true;
         piep.enabled = true;
         background.enabled = true;
         background2.enabled = true;
+        //player.spriteRenderer= player.spriteRenderer.car
         player.enabled = true;
      
        //pieps[] PiepsList = FindObjectsOfType<pieps>(); //change here
@@ -118,6 +129,11 @@ public class GameManeger : MonoBehaviour
         for (int i = 0; i < gameObjects.Length; i++)
         {
             Destroy(gameObjects[i].gameObject);
+        }
+        GameObject[] gameObjects2 = GameObject.FindGameObjectsWithTag("coin");
+        for (int i = 0; i < gameObjects2.Length; i++)
+        {
+            Destroy(gameObjects2[i].gameObject);
         }
     }
     public void pausemenue()
@@ -140,20 +156,19 @@ public class GameManeger : MonoBehaviour
         Time.timeScale = 0f;
         player.enabled = false;
     }
-    binary_highscore tempscore = new binary_highscore();
     public void increaseScore()
     {
         score++;
         scoreText.text = score.ToString();
         highScore = PlayerPrefs.GetInt("highscore");
-        int binaryScore = tempscore.LoadHighScore();
+        int binaryScore = data.highScore;
 
         if (score > highScore)
         {
             PlayerPrefs.SetInt("highscore", score);
             PlayerPrefs.Save();
             scoreText.color = new Color(0, 0, 255);
-            tempscore.SaveHighScore(score);
+            system.Save(data);
             //binary.text=score.ToString();
             
         }
@@ -166,13 +181,25 @@ public class GameManeger : MonoBehaviour
     {
         Gameover.SetActive(true);
         playButton2.SetActive(true);
+        savetobinary();
         Pause();
     }
     private void Update()
     {
         highscoreText.text = PlayerPrefs.GetInt("highscore").ToString();
-        binary.text= tempscore.LoadHighScore().ToString();
+        binary.text= data.highScore.ToString();
+        coin.text=coin_ctr.ToString();  
     }
- 
-    
+    public int coin_ctr;
+    public Text coin;
+    public void coinCounter()
+    {
+        coin_ctr++;
+    }
+    private void savetobinary()
+    {
+        int total_coins = data.coin;
+        data.coin += coin_ctr;
+        system.Save(data);  
+    }
 }

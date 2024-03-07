@@ -13,6 +13,10 @@ public class camera : MonoBehaviour
     {
         SceneManager.LoadScene("main menue");
     }
+    public void gamemangment3()
+    {
+        SceneManager.LoadScene("shop");
+    }
     public void quit()
     {
         Application.Quit();
