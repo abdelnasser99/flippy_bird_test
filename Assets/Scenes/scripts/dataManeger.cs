@@ -4,10 +4,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using static binarycarcter;
 
+[Serializable]
+public class gameData
+{
+    public int highScore;
+    public int coin;
+    public bool blue;
+    public bool red;
+    public int selected_carcter;
+}
 public class dataManeger : MonoBehaviour
 {
+    public gameData gameData = new gameData();
     public static dataManeger instance { get; private set; }
+    private const string saveFileName = "save_Data.dat";
+    string savePath;
     private void Awake()
     {
         if(instance == null && instance != this)
@@ -18,20 +31,21 @@ public class dataManeger : MonoBehaviour
         {
             instance = this;
         }
+        DontDestroyOnLoad(gameObject);
+        SetDefault();
     }
-    [Serializable]
-    public struct Data
+    public void SetDefault()
     {
-        public int highScore;
-        public int coin;
-        public bool blue;
-        public bool red;
-        public int selected_carcter;
+        if (gameData == null)
+        {
+            gameData.blue = false;
+            gameData.red = false;
+            gameData.coin = 0;
+            gameData.highScore = 0;
+            gameData.selected_carcter = 1;
+        }
     }
-
-    private const string saveFileName = "save_Data.dat";
-    string savePath;
-    public Data Save(Data saveData)
+    public void Save()
     {
 
         BinaryFormatter formatter = new BinaryFormatter();
@@ -42,7 +56,7 @@ public class dataManeger : MonoBehaviour
         try
         {
             fileStream = File.Create(savePath);
-            formatter.Serialize(fileStream, saveData);
+            formatter.Serialize(fileStream, gameData);
             Debug.Log("saved successfully!");
         }
         catch (Exception e)
@@ -54,12 +68,11 @@ public class dataManeger : MonoBehaviour
             if (fileStream != null)
                 fileStream.Close();
         }
-        return saveData;
+       
     }
-    public Data Load()
+    public void Load()
     {
         string savePath = Path.Combine(Application.persistentDataPath, saveFileName);
-        Data saveData = new Data();
         if (File.Exists(savePath))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -68,7 +81,7 @@ public class dataManeger : MonoBehaviour
             try
             {
                 fileStream = File.Open(savePath, FileMode.Open);
-                saveData = (Data)formatter.Deserialize(fileStream);
+                gameData = (gameData)formatter.Deserialize(fileStream);
                 Debug.Log("SaveData loaded successfully");
             }
             catch (Exception e)
@@ -83,15 +96,7 @@ public class dataManeger : MonoBehaviour
         }
         else
         {
-            saveData.blue = false;
-            saveData.red = false;
-            saveData.coin = 0;
-            saveData.highScore = 200;
-            saveData.selected_carcter = 1;
-
             Debug.Log("No save file found. Initializing with default values.");
         }
-
-        return saveData;
     }
 }

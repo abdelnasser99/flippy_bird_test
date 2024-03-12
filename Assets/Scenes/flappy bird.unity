@@ -638,6 +638,7 @@ MonoBehaviour:
   Gameover: {fileID: 66430623}
   countdowntime: 3
   countdown: {fileID: 1715531501}
+  system: {fileID: 0}
   coin_ctr: 0
   coin: {fileID: 1660120219}
 --- !u!4 &351849873
@@ -2126,6 +2127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
   directiontemp: {x: 0, y: 0, z: 0}
+  spriteRenderer: {fileID: 0}
   gravity: -9.8
   strength: 5
   sprites:
@@ -2403,6 +2405,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040990210}
   m_CullTransparentMesh: 1
+--- !u!1 &2083364132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2083364134}
+  - component: {fileID: 2083364133}
+  m_Layer: 0
+  m_Name: dataManeger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2083364133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083364132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd37eda36e466498bb96cb3f9158d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2083364134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083364132}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4055011, y: 1.594424, z: 0.039318737}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2096877427
 GameObject:
   m_ObjectHideFlags: 0
@@ -2553,3 +2599,4 @@ SceneRoots:
   - {fileID: 1692716305}
   - {fileID: 1710170749}
   - {fileID: 845696477}
+  - {fileID: 2083364134}
