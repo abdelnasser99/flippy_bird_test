@@ -15,15 +15,51 @@ public class player : MonoBehaviour
     public AudioClip coindsound;
     public AudioSource src;
     int selectedCarcter;
-    SaveData saveData;
+    //SaveData saveData;
     binary_highscore binary_Highscore;
     //binarycarcter carcter = new binarycarcter();
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         binary_Highscore = gameObject.AddComponent<binary_highscore>();
-        saveData = binary_Highscore.Load();
-        selectedCarcter = saveData.selected_carcter;
+        //saveData = binary_Highscore.Load();
+        
+    }
+
+    
+    private void animateSprites()
+    {
+        sprite_index++;
+        switch (selectedCarcter)
+        {
+            case 1:
+                sprite_index++;
+                if (sprite_index >= sprites.Length)
+                {
+                    sprite_index = 0;
+                }
+                spriteRenderer.sprite = sprites[sprite_index];
+                break;
+            case 2:
+                sprite_index++;
+                if (sprite_index >= sprites.Length)
+                {
+                    sprite_index = 0;
+                }
+                spriteRenderer.sprite = sprites2[sprite_index];
+                break;
+            case 3:
+                sprite_index++;
+                if (sprite_index >= sprites.Length)
+                {
+                    sprite_index = 0;
+                }
+                spriteRenderer.sprite = sprites3[sprite_index];
+                break;
+        }
+    }
+    private void Start(){
+        selectedCarcter = dataManeger.instance.gameData.selected_carcter;
         //selectedCarcter = carcter.LoadSelectedCarcter();
         switch (selectedCarcter)
         {
@@ -37,41 +73,6 @@ public class player : MonoBehaviour
                 spriteRenderer.sprite = sprites3[0];
                 break;
         }
-    }
-
-    
-    private void animateSprites()
-    {
-        sprite_index++;
-        switch (selectedCarcter)
-        {
-            case 0:
-                sprite_index++;
-                if (sprite_index >= sprites.Length)
-                {
-                    sprite_index = 0;
-                }
-                spriteRenderer.sprite = sprites[sprite_index];
-                break;
-            case 1:
-                sprite_index++;
-                if (sprite_index >= sprites.Length)
-                {
-                    sprite_index = 0;
-                }
-                spriteRenderer.sprite = sprites2[sprite_index];
-                break;
-            case 2:
-                sprite_index++;
-                if (sprite_index >= sprites.Length)
-                {
-                    sprite_index = 0;
-                }
-                spriteRenderer.sprite = sprites3[sprite_index];
-                break;
-        }
-    }
-    private void Start(){
         InvokeRepeating(nameof(animateSprites),0.15f,0.15f);
     }
     private void Update()
@@ -98,23 +99,23 @@ public class player : MonoBehaviour
         {
             transform.position = directiontemp;
             //FindObjectOfType<GameManeger>().GameOver();
-            GameManeger singleton = GameManeger.Instance;
+            GameManeger singleton = GameManeger.instance;
             singleton.GameOver();
         }
         else if(other.gameObject.tag == "scoring")
         {
             //FindObjectOfType<GameManeger>().increaseScore();
-            GameManeger singleton = GameManeger.Instance;
+            GameManeger singleton = GameManeger.instance;
             singleton.increaseScore();
         }
         else if(other.gameObject.tag == "obstecle_pipe")
         {
-            GameManeger singleton = GameManeger.Instance;
+            GameManeger singleton = GameManeger.instance;
             singleton.GameOver();
         }
         else if (other.gameObject.tag == "coin")
         {
-            GameManeger singleton = GameManeger.Instance;
+            GameManeger singleton = GameManeger.instance;
             singleton.coinCounter();
             src.clip = coindsound;
             src.Play(); 

@@ -17,33 +17,34 @@ public class gameData
 }
 public class dataManeger : MonoBehaviour
 {
-    public gameData gameData = new gameData();
+    public gameData gameData;
     public static dataManeger instance { get; private set; }
-    private const string saveFileName = "save_Data.dat";
+    private const string saveFileName = "Data.data";
     string savePath;
     private void Awake()
     {
-        if(instance == null && instance != this)
+        if (instance != null && instance != this)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {
+            SetDefault();
             instance = this;
+            Load();
+            DontDestroyOnLoad(this.gameObject);
         }
-        DontDestroyOnLoad(gameObject);
-        SetDefault();
     }
     public void SetDefault()
     {
-        if (gameData == null)
-        {
-            gameData.blue = false;
-            gameData.red = false;
-            gameData.coin = 0;
-            gameData.highScore = 0;
-            gameData.selected_carcter = 1;
-        }
+        gameData = new gameData();
+        gameData.blue = false;
+        gameData.red = false;
+        gameData.coin = 0;
+        gameData.highScore = 0;
+        gameData.selected_carcter = 1;
+        //Save();
+
     }
     public void Save()
     {
@@ -68,7 +69,7 @@ public class dataManeger : MonoBehaviour
             if (fileStream != null)
                 fileStream.Close();
         }
-       
+
     }
     public void Load()
     {
@@ -96,6 +97,12 @@ public class dataManeger : MonoBehaviour
         }
         else
         {
+            //SetDefault();
+            savePath = Path.Combine(Application.persistentDataPath, saveFileName);
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream fileStream = File.Create(savePath);
+            formatter.Serialize(fileStream, gameData);
+            fileStream.Close();
             Debug.Log("No save file found. Initializing with default values.");
         }
     }

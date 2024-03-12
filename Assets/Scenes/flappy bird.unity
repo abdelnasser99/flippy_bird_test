@@ -621,6 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highScore: 0
+  highScore2: 0
   scoreText: {fileID: 460162688}
   binary: {fileID: 1311293340}
   highscoreText: {fileID: 140240031}
@@ -638,7 +639,6 @@ MonoBehaviour:
   Gameover: {fileID: 66430623}
   countdowntime: 3
   countdown: {fileID: 1715531501}
-  system: {fileID: 0}
   coin_ctr: 0
   coin: {fileID: 1660120219}
 --- !u!4 &351849873
@@ -2434,6 +2434,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51bd37eda36e466498bb96cb3f9158d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameData:
+    highScore: 0
+    coin: 0
+    blue: 0
+    red: 0
+    selected_carcter: 0
 --- !u!4 &2083364134
 Transform:
   m_ObjectHideFlags: 0

@@ -18,16 +18,14 @@ public class camera_shop : MonoBehaviour
     public Text blue;
     public Text red;    
     int money;
-    SaveData data;
+    //SaveData data;
     public void Start()
     {
-        system = gameObject.AddComponent<binary_highscore>();
-        data = system.Load();
-        if (data.red == true)
+        if (dataManeger.instance.gameData.red == true)
         {
             red.gameObject.SetActive(false);
         }
-        if (data.blue == true)
+        if (dataManeger.instance.gameData.blue == true)
         {
             blue.gameObject.SetActive(false);
         }
@@ -35,16 +33,16 @@ public class camera_shop : MonoBehaviour
     private void Update()
     {
         //data = system.Load();
-        coin.text = "Coins: " + data.coin.ToString();
-        money = data.coin;
-        if (data.selected_carcter == 1)
+        coin.text = "Coins: " + dataManeger.instance.gameData.coin.ToString();
+        money = dataManeger.instance.gameData.coin;
+        if (dataManeger.instance.gameData.selected_carcter == 1)
         {
             bird0.transform.localScale = new Vector3(0.7f, 0.7f, 1);
 
             bird1.transform.localScale = new Vector3(1, 1, 1);
             bird2.transform.localScale = new Vector3(1, 1, 1);
         }
-        else if(data.selected_carcter == 2)
+        else if(dataManeger.instance.gameData.selected_carcter == 2)
         {
             bird1.transform.localScale = new Vector3(0.7f, 0.7f, 1);
 
@@ -61,43 +59,40 @@ public class camera_shop : MonoBehaviour
     }
     public void gamemangment2()
     {
-        data = system.Load();
-        if (data.blue==false && money>=50)
+        
+        if (dataManeger.instance.gameData.blue==false && money>=50)
         {
-            data.coin -= 50;
-            data.blue = true;
+            dataManeger.instance.gameData.coin -= 50;
+            dataManeger.instance.gameData.blue = true;
             blue.gameObject.SetActive(false);
         }
         else
         {
-            data.selected_carcter = 2;
+            dataManeger.instance.gameData.selected_carcter = 2;
         }
-        system.Save(data);
+        dataManeger.instance.Save();
     }
     public void gamemangment1()
     {
-        data = system.Load();
-        data.selected_carcter = 1;
-        system.Save(data);
+        dataManeger.instance.gameData.selected_carcter = 1;
+        dataManeger.instance.Save();
     }
     public void gamemangment3()
     {
-        data = system.Load();
-        if (data.red == false && money >= 100)
+        if (dataManeger.instance.gameData.red == false && money >= 100)
         {
-            data.coin -= 100;
-            data.red = true;
+            dataManeger.instance.gameData.coin -= 100;
+            dataManeger.instance.gameData.red = true;
             red.gameObject.SetActive(false);
         }
         else
         {
-            data.selected_carcter = 3;
+            dataManeger.instance.gameData.selected_carcter = 3;
         }
-        system.Save(data);
+        dataManeger.instance.Save();
     }
     public void main_menue()
     {
-        data = system.Load();
         SceneManager.LoadScene("main menue");
         //data.coin=300;
         //system.Save(data);
