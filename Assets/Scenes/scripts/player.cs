@@ -113,14 +113,14 @@ public class player : MonoBehaviour
             GameManeger singleton = GameManeger.instance;
             singleton.GameOver();
         }
-        else if (other.gameObject.tag == "coin")
+        /*else if (other.gameObject.tag == "coin")
         {
             GameManeger singleton = GameManeger.instance;
             singleton.coinCounter();
             src.clip = coindsound;
             src.Play(); 
             Destroy(other.gameObject);
-        }
+        }*/
     }
    
 }

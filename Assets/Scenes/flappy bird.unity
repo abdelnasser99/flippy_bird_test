@@ -282,7 +282,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 351849872}
         m_TargetAssemblyTypeName: GameManeger, Assembly-CSharp
-        m_MethodName: Play
+        m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -365,6 +365,8 @@ MonoBehaviour:
   coinspawnRate: 0
   minHight: -1
   maxHight: 1
+  piepsList: []
+  coinList: []
 --- !u!4 &88631939
 Transform:
   m_ObjectHideFlags: 0
@@ -625,11 +627,11 @@ MonoBehaviour:
   scoreText: {fileID: 460162688}
   binary: {fileID: 1311293340}
   highscoreText: {fileID: 140240031}
-  player: {fileID: 1845456395}
-  piep: {fileID: 8089040659180037351, guid: af96bfa13412fec4a8ed92372b2ac1de, type: 3}
-  Coin: {fileID: -3592062210427869121, guid: 45e07e59104412d4f8f3b9760bf81fec, type: 3}
-  background: {fileID: 1240832321}
-  background2: {fileID: 1541569664}
+  player: {fileID: 1845456394}
+  piep: {fileID: 8602282379609858135, guid: af96bfa13412fec4a8ed92372b2ac1de, type: 3}
+  Coin: {fileID: 7005453937678006513, guid: 45e07e59104412d4f8f3b9760bf81fec, type: 3}
+  background: {fileID: 1541569660}
+  background2: {fileID: 1240832320}
   playButton: {fileID: 1505103164}
   playButton2: {fileID: 941090277}
   pauseButton: {fileID: 2040990210}
@@ -1676,7 +1678,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 351849872}
         m_TargetAssemblyTypeName: GameManeger, Assembly-CSharp
-        m_MethodName: startcount
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

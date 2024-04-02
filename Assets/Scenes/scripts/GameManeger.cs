@@ -6,6 +6,7 @@ using System.Linq;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
+using Unity.VisualScripting;
 
 public class GameManeger : MonoBehaviour
 {
@@ -17,11 +18,11 @@ public class GameManeger : MonoBehaviour
     public Text scoreText;
     public Text binary;
     public Text highscoreText;
-    public player player;
-    public pieps piep;
-    public coin_script Coin;
-    public paralex background;
-    public paralex background2;
+    public GameObject player;
+    public GameObject piep;
+    public GameObject Coin;
+    public GameObject background;
+    public GameObject background2;
     public GameObject playButton;
     public GameObject playButton2;
     public GameObject pauseButton;
@@ -31,11 +32,12 @@ public class GameManeger : MonoBehaviour
     public GameObject Gameover;
     public int countdowntime = 3;
     public Text countdown;
-    //private SpriteRenderer spriteRenderer;
+    Time time;
+    TimeSpan playTime;
     int selectedCarcter;
-    //public gameData gameData= new gameData();
     public void Awake()
     {
+       
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
@@ -45,7 +47,6 @@ public class GameManeger : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(gameObject);
-        dataManeger dataManeger = new dataManeger();
         coin_ctr = 0;
         Gameover.SetActive(false);
         pauseButton.SetActive(false);
@@ -54,64 +55,16 @@ public class GameManeger : MonoBehaviour
         mainmenue.SetActive(false);
         playButton2.SetActive(false);
         Application.targetFrameRate = 60;
+        countdown.gameObject.SetActive(false);
         Pause();
     }
-    public void startcount()
+    
+   public void Restart()
     {
-        piep.enabled = false;
-        background.enabled = false;
-        background2.enabled = false;
-        Coin.enabled = false;
-        StartCoroutine(countdowntostart());
-    }
-    IEnumerator countdowntostart()
-    {
-        playButton.SetActive(false);
-        Time.timeScale = 1f;
-        while (countdowntime > 0)
-        {
-            countdown.text = countdowntime.ToString();
-            yield return new WaitForSeconds(1f);
-            countdowntime--;
-        }
-        countdown.text = "GO!";
-        yield return new WaitForSeconds(1f);
-        Play();
-        countdown.gameObject.SetActive(false);
-    }
-    public void Play()
-    {
-
-        coin_ctr = 0;
-        //startcount();
-        pauseButton.SetActive(false);
-        playButton2.SetActive(false);
         resume.SetActive(false);
         restart.SetActive(false);
-        Time.timeScale = 1f;
-        pauseButton.SetActive(true);
-        score = 0;
-        scoreText.color = new Color(255, 0, 0);
-        scoreText.text = score.ToString();
-        Gameover.SetActive(false);
-        Coin.enabled = true;
-        piep.enabled = true;
-        background.enabled = true;
-        background2.enabled = true;
-        //player.spriteRenderer= player.spriteRenderer.car
-        player.enabled = true;
-
-        //pieps[] PiepsList = FindObjectsOfType<pieps>(); //change here
-        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("obstecle_pipe");
-        for (int i = 0; i < gameObjects.Length; i++)
-        {
-            Destroy(gameObjects[i].gameObject);
-        }
-        GameObject[] gameObjects2 = GameObject.FindGameObjectsWithTag("coin");
-        for (int i = 0; i < gameObjects2.Length; i++)
-        {
-            Destroy(gameObjects2[i].gameObject);
-        }
+        spawner.instance.clear();
+        Play();
     }
     public void pausemenue()
     {
@@ -119,11 +72,11 @@ public class GameManeger : MonoBehaviour
         restart.SetActive(true);
         mainmenue.SetActive(true);
         Time.timeScale = 0f;
-        player.enabled = false;
+        player.SetActive(false);
     }
     public void resumefun()
     {
-        player.enabled = true;
+        player.SetActive(true);
         Time.timeScale = 1f;
         resume.SetActive(false);
         restart.SetActive(false);
@@ -131,7 +84,8 @@ public class GameManeger : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0f;
-        player.enabled = false;
+        player.SetActive(false);
+        
     }
     public void increaseScore()
     {
@@ -159,12 +113,53 @@ public class GameManeger : MonoBehaviour
         playButton2.SetActive(true);
         dataManeger.instance.Save();
         Pause();
+        spawner.instance.clear();
+        piep.SetActive(false);
+    }
+    public void Play()
+    {
+        Time.timeScale = 0f;
+        playTime = DateTime.Now.TimeOfDay;
+        piep.SetActive(false);
+        Coin.SetActive(false);
+        player.SetActive(false);
+        playButton.SetActive(false);
+        countdown.gameObject.SetActive(true);
+
+        coin_ctr = 0;
+        pauseButton.SetActive(false);
+        playButton2.SetActive(false);
+        resume.SetActive(false);
+        restart.SetActive(false);
+        pauseButton.SetActive(true);
+        score = 0;
+        scoreText.color = new Color(255, 0, 0);
+        scoreText.text = score.ToString();
+        Gameover.SetActive(false);
+        Coin.SetActive(true);
+        piep.SetActive(true);
+        background.SetActive(true);
+        background2.SetActive(true);
+        player.SetActive(true);
     }
     private void Update()
     {
         highscoreText.text = PlayerPrefs.GetInt("highscore").ToString();
         binary.text = dataManeger.instance.gameData.highScore.ToString();
         coin.text = coin_ctr.ToString();
+        if(DateTime.Now.TimeOfDay.Minutes == playTime.Minutes)
+        {
+            countdown.text = (DateTime.Now.TimeOfDay.Seconds - playTime.Seconds).ToString();
+        }
+        else
+        {
+            countdown.text = (DateTime.Now.TimeOfDay.Seconds - playTime.Seconds ).ToString();
+        }
+        if (DateTime.Now.TimeOfDay.Seconds == playTime.Seconds + 4 )
+        {
+            Time.timeScale = 1f;
+            countdown.gameObject.SetActive(false);
+        }
     }
     public int coin_ctr;
     public Text coin;
@@ -173,5 +168,4 @@ public class GameManeger : MonoBehaviour
         coin_ctr++;
         dataManeger.instance.gameData.coin++;
     }
-
 }

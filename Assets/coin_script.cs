@@ -5,6 +5,8 @@ public class coin_script : MonoBehaviour
 {
     public float speed = 5f;
     private float leftEdge;
+    //public AudioClip coindsound;
+    //public AudioSource src;
     private void Start()
     {
         leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
@@ -12,9 +14,16 @@ public class coin_script : MonoBehaviour
     private void Update()
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
-        /*if (transform.position.x < leftEdge)
+
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
         {
-            Destroy(gameObject);
-        }*/
+            GameManeger.instance.coinCounter();
+            //src.clip = coindsound;
+            //src.Play();
+            Destroy(this.gameObject);
+        }
     }
 }
